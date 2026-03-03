@@ -1,9 +1,10 @@
-import type { SnowConditions } from "@/lib/types";
+import type { SnowConditions, LiftStatusData } from "@/lib/types";
 import { SOURCE_LINKS } from "@/lib/constants";
 import CardShell from "./CardShell";
 
 interface SnowConditionsCardProps {
   conditions: SnowConditions;
+  liftStatus: LiftStatusData;
 }
 
 function StatRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
@@ -15,7 +16,7 @@ function StatRow({ label, value, highlight }: { label: string; value: string; hi
   );
 }
 
-export default function SnowConditionsCard({ conditions }: SnowConditionsCardProps) {
+export default function SnowConditionsCard({ conditions, liftStatus }: SnowConditionsCardProps) {
   const isUnavailable = conditions.snowCondition === "Unavailable";
   const baseDepth = conditions.baseDepthMin === conditions.baseDepthMax
     ? `${conditions.baseDepthMax}"`
@@ -41,7 +42,7 @@ export default function SnowConditionsCard({ conditions }: SnowConditionsCardPro
             highlight={conditions.lastSnowAmount > 0}
           />
           <StatRow label="Surface" value={conditions.snowCondition} />
-          <StatRow label="Lifts Open" value={`${conditions.liftsOpen} / ${conditions.liftsTotal}`} />
+          <StatRow label="Lifts Open" value={`${liftStatus.liftsOpen} / ${liftStatus.liftsTotal}`} />
           <StatRow label="Season Total" value={`${conditions.seasonTotal}"`} />
         </div>
       )}

@@ -49,7 +49,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <WeatherCard forecast={weather} />
-          <SnowConditionsCard conditions={snowConditions} />
+          <SnowConditionsCard conditions={snowConditions} liftStatus={liftStatus} />
         </div>
 
         <LiftStatusCard liftStatus={liftStatus} />

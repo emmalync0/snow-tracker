@@ -42,10 +42,9 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default function LiftStatusCard({ liftStatus }: LiftStatusCardProps) {
   return (
-    <CardShell title="Lift & Terrain Status">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <CardShell title="Lift Status">
+      <div className="mb-4">
         <ProgressBar open={liftStatus.liftsOpen} total={liftStatus.liftsTotal} label="Lifts" />
-        <ProgressBar open={liftStatus.trailsOpen} total={liftStatus.trailsTotal} label="Trails" />
       </div>
 
       {liftStatus.lifts.length > 0 && (
@@ -89,7 +88,7 @@ export default function LiftStatusCard({ liftStatus }: LiftStatusCardProps) {
           rel="noopener noreferrer"
           className="hover:text-tahoe-600 transition-colors underline decoration-gray-300"
         >
-          Full Lift & Terrain Status
+          Full Lift Status
         </a>
       </div>
     </CardShell>
