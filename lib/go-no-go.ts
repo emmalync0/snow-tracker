@@ -24,10 +24,9 @@ export function computeGoNoGo(
     ? Math.max(...weekendDays.map((d) => d.windSpeedMax))
     : weather.days[0]?.windSpeedMax ?? 0;
 
-  // Total expected new snow (next 3 days + weekend)
+  // Total expected new snow from forecast only (next 5 days)
   const newSnowExpected =
-    weather.days.slice(0, 5).reduce((sum, d) => sum + d.snowfall, 0) +
-    snow.newSnow24h;
+    weather.days.slice(0, 5).reduce((sum, d) => sum + d.snowfall, 0);
 
   // Snow score
   let snowScore: "great" | "good" | "meh";
@@ -78,8 +77,8 @@ export function computeGoNoGo(
   }
 
   // Resort conditions
-  if (snow.baseDepth > 0) {
-    reasons.push(`Base depth: ${snow.baseDepth}" — ${snow.snowCondition}`);
+  if (snow.baseDepthMax > 0) {
+    reasons.push(`Base depth: ${snow.baseDepthMin}–${snow.baseDepthMax}" — ${snow.snowCondition}`);
   }
 
   // Compute verdict

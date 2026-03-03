@@ -80,29 +80,26 @@ export async function fetchSnowConditions(): Promise<SnowConditions> {
 
     return {
       resortName: resort.resortName ?? "Palisades Tahoe",
-      baseDepth: parseFloat(resort.avgBaseDepth) || 0,
-      newSnow24h: parseFloat(resort.newSnow) || 0,
-      newSnow48h: parseFloat(resort.newSnow48) || 0,
-      snowCondition: resort.weatherToday_Condition ?? "Unknown",
-      liftsOpen: parseInt(resort.liftsOpen) || 0,
-      liftsTotal: parseInt(resort.liftsTotal) || 0,
-      trailsOpen: parseInt(resort.trailsOpen) || 0,
-      trailsTotal: parseInt(resort.trailsTotal) || 0,
+      baseDepthMin: parseFloat(resort.avgBaseDepthMin) || 0,
+      baseDepthMax: parseFloat(resort.avgBaseDepthMax) || 0,
+      lastSnowAmount: parseFloat(resort.lastSnowFallAmount) || 0,
+      lastSnowDate: resort.lastSnowFallDate ?? "",
+      snowCondition: resort.primarySurfaceCondition ?? resort.secondarySurfaceCondition ?? "Unknown",
+      liftsOpen: parseInt(resort.openDownHillLifts) || 0,
+      liftsTotal: parseInt(resort.maxOpenDownHillLifts) || 0,
       seasonTotal: parseFloat(resort.seasonTotal) || 0,
-      lastUpdated: resort.lastUpdated ?? new Date().toISOString(),
+      lastUpdated: resort.reportDateTime ?? new Date().toISOString(),
     };
   } catch {
-    // Return fallback data if API is unavailable
     return {
       resortName: "Palisades Tahoe",
-      baseDepth: 0,
-      newSnow24h: 0,
-      newSnow48h: 0,
+      baseDepthMin: 0,
+      baseDepthMax: 0,
+      lastSnowAmount: 0,
+      lastSnowDate: "",
       snowCondition: "Unavailable",
       liftsOpen: 0,
       liftsTotal: 0,
-      trailsOpen: 0,
-      trailsTotal: 0,
       seasonTotal: 0,
       lastUpdated: new Date().toISOString(),
     };
@@ -259,8 +256,8 @@ export async function fetchLiftStatus(snow: SnowConditions): Promise<LiftStatusD
   const result: LiftStatusData = {
     liftsOpen: snow.liftsOpen,
     liftsTotal: snow.liftsTotal,
-    trailsOpen: snow.trailsOpen,
-    trailsTotal: snow.trailsTotal,
+    trailsOpen: 0,
+    trailsTotal: 0,
     lifts: [],
     lastUpdated: new Date().toISOString(),
   };

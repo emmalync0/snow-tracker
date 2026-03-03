@@ -17,6 +17,9 @@ function StatRow({ label, value, highlight }: { label: string; value: string; hi
 
 export default function SnowConditionsCard({ conditions }: SnowConditionsCardProps) {
   const isUnavailable = conditions.snowCondition === "Unavailable";
+  const baseDepth = conditions.baseDepthMin === conditions.baseDepthMax
+    ? `${conditions.baseDepthMax}"`
+    : `${conditions.baseDepthMin}–${conditions.baseDepthMax}"`;
 
   return (
     <CardShell title="Snow Conditions" className="col-span-1">
@@ -29,12 +32,16 @@ export default function SnowConditionsCard({ conditions }: SnowConditionsCardPro
         </p>
       ) : (
         <div>
-          <StatRow label="Base Depth" value={`${conditions.baseDepth}"`} />
-          <StatRow label="New Snow (24h)" value={`${conditions.newSnow24h}"`} highlight={conditions.newSnow24h > 0} />
-          <StatRow label="New Snow (48h)" value={`${conditions.newSnow48h}"`} highlight={conditions.newSnow48h > 0} />
+          <StatRow label="Base Depth" value={baseDepth} />
+          <StatRow
+            label="Last Snowfall"
+            value={conditions.lastSnowAmount > 0
+              ? `${conditions.lastSnowAmount}" (${conditions.lastSnowDate})`
+              : "—"}
+            highlight={conditions.lastSnowAmount > 0}
+          />
           <StatRow label="Surface" value={conditions.snowCondition} />
-          <StatRow label="Lifts" value={`${conditions.liftsOpen} / ${conditions.liftsTotal}`} />
-          <StatRow label="Trails" value={`${conditions.trailsOpen} / ${conditions.trailsTotal}`} />
+          <StatRow label="Lifts Open" value={`${conditions.liftsOpen} / ${conditions.liftsTotal}`} />
           <StatRow label="Season Total" value={`${conditions.seasonTotal}"`} />
         </div>
       )}
@@ -45,6 +52,10 @@ export default function SnowConditionsCard({ conditions }: SnowConditionsCardPro
         <span>&middot;</span>
         <a href={SOURCE_LINKS.snoCountry} target="_blank" rel="noopener noreferrer" className="hover:text-tahoe-600 transition-colors underline decoration-gray-300">
           SnoCountry
+        </a>
+        <span>&middot;</span>
+        <a href={SOURCE_LINKS.mountainReport} target="_blank" rel="noopener noreferrer" className="hover:text-tahoe-600 transition-colors underline decoration-gray-300">
+          Mountain Report
         </a>
       </div>
     </CardShell>

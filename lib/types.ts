@@ -23,14 +23,13 @@ export interface WeatherForecast {
 
 export interface SnowConditions {
   resortName: string;
-  baseDepth: number; // inches
-  newSnow24h: number; // inches
-  newSnow48h: number; // inches
-  snowCondition: string; // e.g. "Powder", "Packed Powder"
+  baseDepthMin: number; // inches
+  baseDepthMax: number; // inches
+  lastSnowAmount: number; // inches (most recent storm)
+  lastSnowDate: string; // e.g. "Feb 17, 2026"
+  snowCondition: string; // e.g. "Machine Groomed", "Powder"
   liftsOpen: number;
   liftsTotal: number;
-  trailsOpen: number;
-  trailsTotal: number;
   seasonTotal: number; // inches
   lastUpdated: string;
 }
