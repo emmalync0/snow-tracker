@@ -9,6 +9,7 @@ import LiftStatusCard from "@/components/LiftStatusCard";
 import RoadConditionsCard from "@/components/RoadConditionsCard";
 import WebcamsCard from "@/components/WebcamsCard";
 import BlogCard from "@/components/BlogCard";
+import NavTabs from "@/components/NavTabs";
 import RefreshButton from "@/components/RefreshButton";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#f5f4f9]">
       <Header />
+      <NavTabs />
       <main className="max-w-5xl mx-auto px-6 py-6 space-y-5">
         <div className="flex items-center justify-between">
           <p className="text-[11px] text-gray-400">
