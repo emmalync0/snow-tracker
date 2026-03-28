@@ -72,23 +72,31 @@ async function fetchBatchWeather(
 
       // When multiple locations, Open-Meteo returns an array
       const entries = Array.isArray(data) ? data : [data];
-      entries.forEach((entry: Record<string, Record<string, number[]>>, idx: number) => {
+      for (let idx = 0; idx < entries.length; idx++) {
         const resort = chunk[idx];
-        if (!resort || !entry.daily) return;
-        const d = entry.daily;
-        const forecast: IkonResortConditions["forecast"] = (d.time as unknown as string[]).map(
+        const daily = entries[idx]?.daily as {
+          time: string[];
+          temperature_2m_max: number[];
+          temperature_2m_min: number[];
+          snowfall_sum: number[];
+          precipitation_sum: number[];
+          wind_speed_10m_max: number[];
+          weather_code: number[];
+        } | undefined;
+        if (!resort || !daily) continue;
+        const forecast: IkonResortConditions["forecast"] = daily.time.map(
           (date: string, j: number) => ({
             date,
-            tempMax: d.temperature_2m_max[j] ?? 0,
-            tempMin: d.temperature_2m_min[j] ?? 0,
-            snowfall: d.snowfall_sum[j] ?? 0,
-            precipitation: d.precipitation_sum[j] ?? 0,
-            windSpeedMax: d.wind_speed_10m_max[j] ?? 0,
-            weatherCode: d.weather_code[j] ?? 0,
+            tempMax: daily.temperature_2m_max[j] ?? 0,
+            tempMin: daily.temperature_2m_min[j] ?? 0,
+            snowfall: daily.snowfall_sum[j] ?? 0,
+            precipitation: daily.precipitation_sum[j] ?? 0,
+            windSpeedMax: daily.wind_speed_10m_max[j] ?? 0,
+            weatherCode: daily.weather_code[j] ?? 0,
           }),
         );
         results.set(resort.name, forecast);
-      });
+      }
     } catch {
       // Batch failed — skip this chunk
     }
@@ -103,6 +111,11 @@ function findBestPowderWindow(forecast: IkonResortConditions["forecast"]): {
   suggestedStart: string;
   suggestedEnd: string;
 } {
+  if (forecast.length === 0) {
+    const today = new Date().toISOString().slice(0, 10);
+    return { bestDay: today, bestDaySnow: 0, suggestedStart: today, suggestedEnd: today };
+  }
+
   // Find the day with the most snowfall, then suggest arriving the day after
   // (ski the freshies after the storm clears)
   let bestIdx = 0;
